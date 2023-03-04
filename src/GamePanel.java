@@ -116,7 +116,11 @@ public class GamePanel extends JPanel implements ActionListener {
             bodyParts++;
             applesEaten++;
             newApple();
-            DELAY -= 5;
+            if(DELAY>30){
+                DELAY -= 5;
+            }else{
+                
+            }
             timer.setDelay(DELAY);
         }
     }
