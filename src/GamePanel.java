@@ -28,22 +28,43 @@ public class GamePanel extends JPanel implements ActionListener {
     boolean running = false;
     Timer timer;
     Random random;
-
-
+    JButton restartButton;
+    
+    
     GamePanel(){
         random = new Random();
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.black);
         this.setFocusable(true);
         this.addKeyListener(new MyKeyAdapter());
+        restartButton = new JButton("Restart Game");
+        restartButton.addActionListener(this);
+        add(restartButton);
         startGame();
     }
 
     public void startGame(){
-        newApple();
+        bodyParts = 6;
+        applesEaten = 0;
+        DELAY = 120;
+        direction = 'R';
         running = true;
+        x[0] = SCREEN_WIDTH / 2;
+        y[0] = SCREEN_HEIGHT / 2;
+        for (int i = 1; i < bodyParts; i++) {
+            x[i] = x[0] - i * UNIT_SIZE;
+            y[i] = y[0];
+        }
         timer = new Timer(DELAY, this);
         timer.start();
+        // bodyParts = 6;
+        // applesEaten = 0;
+        // direction = 'R';
+        // newApple();
+        // running = true;
+        // timer = new Timer(DELAY, this);
+        // restartButton.setVisible(false);
+        // timer.start();
     }
     public void paintComponent(Graphics g){
         super.paintComponent(g);
@@ -164,10 +185,17 @@ public class GamePanel extends JPanel implements ActionListener {
         g.setFont(new Font("Ink Free", Font.BOLD, 40));
         FontMetrics metrics2 = getFontMetrics(g.getFont());
         g.drawString("Score: " + applesEaten, (SCREEN_WIDTH - metrics2.stringWidth("Score: " + applesEaten))/2, SCREEN_HEIGHT/4);
+
+        restartButton.setVisible(true);
     }
     @Override
     public void actionPerformed(ActionEvent e){
-        if(running){
+        if(e.getSource() == restartButton){
+            restartButton.setVisible(false);
+            startGame();
+        }
+        else if(running){
+            restartButton.setVisible(false);
             move();
             checkApple();
             checkCollisions();
